@@ -1,0 +1,30 @@
+syntax = "proto3";
+option cc_generic_services = true;
+
+// 向注册中心注册服务
+message RegisterServerReq {
+  string ServiceName = 1;
+  string ServiceIPAndPort = 2; // IP:PORT
+}
+
+message RegisterServerResp {
+  int32 ret_code = 1;
+  string res_info = 2;
+}
+
+// 获取存在注册中心的服务的IP-Port
+message GetTargetAddrReq {
+  string sourceServiceName = 1; // 调用者本身的服务名
+  string targetServiceName = 2; // 调用者想调用的服务名
+}
+
+message GetTargetAddrResp {
+  int32 ret_code = 1;
+  string res_info = 2;
+  repeated string targetServiceIPAndPort = 3;
+}
+
+service Register {
+  rpc getTargetAddr(GetTargetAddrReq) returns(GetTargetAddrResp);
+  rpc registerServer(RegisterServerReq) returns(RegisterServerResp);
+}
